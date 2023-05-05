@@ -1,0 +1,103 @@
+﻿@using App.Business.Enum;
+@model ProductListViewModel
+@*    <script>
+
+        $(document).ready(function () {
+            $('.Sort_btn').click(function () {
+                alert("a")
+                var sampleBoolJson = '@Html.Raw(JsonSerializer.Serialize(Model.CurrentFilterState))';
+                var sampleBool = JSON.parse(sampleBoolJson);
+                //alert(sampleBool)
+                 $.ajax({
+                     type: 'GET',
+                      url: "@Url.Action("Index")",
+                      data: { page: @Model.CurrentPage, category: @Model.CurrentCategory, filterAZ: sampleBool },
+                      success: function (data) {
+                         document.documentElement.innerHTML = data;
+                         console.log(data)
+                      },
+                      error: function (req, status, error) {
+
+                          alert(status);
+                          console.log(status);
+                      }
+                 });
+            });
+        });
+
+    </script>*@
+
+
+
+<section style="display:flex; text-align:center; align-items:center; justify-content:center;margin:10px;">
+    <a href="/product/add" class="btn btn-outline-primary m-1">Create New</a>
+
+    @if (Model.AZSort == CheckFilter.Zero)
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=@CheckFilter.One" class="btn btn-outline-primary m-1">A-Z</a>
+    }
+    else if (Model.AZSort==CheckFilter.One)
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=@CheckFilter.Two" class="btn btn-outline-success m-1">A-Z</a>
+    }
+    else
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=@CheckFilter.Zero" class="btn btn-outline-danger m-1">Z-A</a>
+    }
+
+    @if (Model.PriceSort == CheckFilter.Zero)
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=@Model.AZSort&filter1_100=@CheckFilter.One" class="btn btn-outline-primary m-1">Price Sort</a>
+    }
+    else if (Model.PriceSort == CheckFilter.One)
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=@Model.AZSort&filter1_100=@CheckFilter.Two" class="btn btn-outline-success m-1">0-100</a>
+    }
+    else
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=@Model.AZSort&filter1_100=@CheckFilter.Zero" class="btn btn-outline-danger m-1">100-0</a>
+    }
+
+
+</section>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ProductName</th>
+            <th>UnitPrice</th>
+            <th>UnitsInStock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+         @foreach (var item in Model.Products)
+             {
+                 <tr>
+                     <td>
+                         @item.ProductName
+                     </td>
+                     <td>
+                         @item.UnitPrice
+                     </td>
+                     <td>
+                         @item.UnitsInStock
+                     </td>
+                     <td>
+                         <a class="btn btn-xs btn-success" asp-controller="Cart"
+                         asp-action="AddToCart" asp-route-productId="@item.ProductId"
+                         >Add To Cart</a>
+                     </td>
+                 </tr>
+         }
+</tbody>
+</table>
+
+<product-list-pager
+current-category="@Model.CurrentCategory"
+current-page="@Model.CurrentPage"
+page-count="@Model.PageCount"
+page-size="@Model.PageSize"
+>
+
+</product-list-pager>
