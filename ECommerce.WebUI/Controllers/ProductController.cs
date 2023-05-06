@@ -22,10 +22,6 @@ namespace ECommerce.WebUI.Controllers
             _categoryService = categoryService;
         }
 
-
-        public static CheckFilter FilterState { get; set; } = CheckFilter.Zero;
-
-
         public IActionResult Index(int page = 1, int category = 0, CheckFilter filterAZ = CheckFilter.Zero, CheckFilter filter1_100 = CheckFilter.Zero)
         {
             int pageSize = 10;
@@ -33,10 +29,7 @@ namespace ECommerce.WebUI.Controllers
             if (filterAZ != CheckFilter.Zero)
             {
                 products = _productService.GetAllByFilterAZ(products, filterAZ);
-                //if(filterAZ==CheckFilter.One) FilterState = CheckFilter.One;
-                //else FilterState = CheckFilter.Two;
             }
-            //else FilterState = filterAZ;
             if (filter1_100 != CheckFilter.Zero)
             {
                 products = _productService.GetAllByFilterPrice(products, filter1_100);
